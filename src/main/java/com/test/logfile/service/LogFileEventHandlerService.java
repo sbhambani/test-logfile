@@ -27,7 +27,11 @@ public class LogFileEventHandlerService {
         entity.setDuration(duration);
         entity.setType(logFileEvent.getType());
         entity.setHost(logFileEvent.getHost());
-        entity.setAlert(duration > EVENT_DURATION_THRESHOLD);
+        boolean flagEvent = duration > EVENT_DURATION_THRESHOLD;
+        if (flagEvent) {
+            logger.warn("Event={} has taken more time to finish", logFileEvent.getEventId());
+        }
+        entity.setAlert(flagEvent);
         logFileEventRepository.save(entity);
     }
 }
